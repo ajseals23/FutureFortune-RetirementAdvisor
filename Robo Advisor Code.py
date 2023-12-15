@@ -6,8 +6,8 @@ age = int(input("How old are you?: "))
 Gender = input("Enter your sex (M/F): ")
 years_to_retirement = int(retirement_age - age)
 
-life_expectancy = pd.read_excel("Life Expectancy.xlsx")
-asset_allocation = pd.read_excel("Asset Allocation Table.xlsx")
+life_expectancy = pd.read_excel("Life Expectancy Excel.xlsx")
+asset_allocation = pd.read_excel("Asset Allocation Excel.xlsx")
 life_expectancy = pd.DataFrame(life_expectancy)
 asset_allocation = pd.DataFrame(asset_allocation)
 
