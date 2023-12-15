@@ -2,6 +2,10 @@ import tkinter as tk
 from tkinter import messagebox
 import pandas as pd
 
+# Constants
+RETIREMENT_AGE = 63  # Adjustable retirement age
+MAX_AGE_SUPPORTED = 100  # Maximum age supported by the data
+
 # Load Excel Data
 try:
     life_expectancy_data = pd.read_excel("Life Expectancy Excel.xlsx")
@@ -10,15 +14,14 @@ except Exception as e:
     messagebox.showerror("Error", f"Failed to load Excel files: {e}")
     exit(1)
 
-# Constants
-RETIREMENT_AGE = 63  # Update if needed
-
 # Function to calculate years to retirement
 def calculate_years_to_retirement(age, retirement_age=RETIREMENT_AGE):
     return retirement_age - age
 
 # Function to retrieve life expectancy from the data
 def retrieve_life_expectancy(age, gender):
+    if age > MAX_AGE_SUPPORTED or age < 0:
+        return "Age out of supported range"
     try:
         column = "Life Expectancy" if gender == "M" else "Life Expectancy2"
         return life_expectancy_data[column].iloc[age]
@@ -27,6 +30,8 @@ def retrieve_life_expectancy(age, gender):
 
 # Function to retrieve asset allocation
 def get_asset_allocation(years_to_retirement):
+    if years_to_retirement < 0:
+        return "Retirement age already passed"
     try:
         allocation = asset_allocation_data[asset_allocation_data['Years to Retirement'] == years_to_retirement]
         if not allocation.empty:
@@ -39,6 +44,9 @@ def get_asset_allocation(years_to_retirement):
 def on_submit():
     try:
         age = int(age_entry.get())
+        if age < 0 or age > MAX_AGE_SUPPORTED:
+            raise ValueError("Age is out of supported range")
+
         gender = gender_var.get()
         if not gender:
             raise ValueError("Please select a gender")
@@ -77,6 +85,7 @@ submit_button.pack()
 
 # Run the application
 app.mainloop()
+
 
 
 
